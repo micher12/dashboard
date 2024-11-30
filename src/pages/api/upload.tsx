@@ -11,7 +11,7 @@ export const config = {
 export default async function upload(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
-
+      
 
       const { searchParams } = new URL(req.url as string, `http://${req.headers.host}`);
       const filename = searchParams.get('filename');
