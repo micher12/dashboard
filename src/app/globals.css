@@ -8,3 +8,109 @@
     margin: 0 auto;
     padding: 0 2%;
 }
+body::-webkit-scrollbar{
+    width: 6px;
+    border-radius: 200px;
+    background-color: #222;
+}
+body::-webkit-scrollbar-thumb{
+    width: 6px;
+    border: 200px;
+    background-color: #3b82f6;
+}
+.shadown{
+    box-shadow: 0 0 24px rgba(36, 38, 114, 0.18);
+}
+.skeleton-image{
+    width: 300px;
+    height: 200px;
+    background: linear-gradient(45deg, 
+        #cbd5e1, 
+        #f1f5f9,
+        #cbd5e1
+    );
+    background-size: 200% 200%;
+    animation: backgroundInimate .4s linear alternate infinite;
+}
+.skeleton-bg{
+    background: linear-gradient(45deg, 
+        #cbd5e1, 
+        #f1f5f9,
+        #cbd5e1
+    );
+    background-size: 200% 200%;
+    animation: backgroundInimate .4s linear alternate infinite;
+}
+.border{
+    border: 1px solid rgb(190, 195, 202);
+}
+.asideStyle{
+    border-right: 1px solid rgb(190, 195, 202);
+    background-color: #fff;
+}
+.main-content{
+    background-color: #fff;
+    min-height: 90vh;
+    max-width: 95%;
+    width: 100%;
+    margin: 0 auto;
+}
+.produtcs-selection a{
+    cursor: pointer;
+}
+.productContainer{
+    max-height: 80vh;
+}
+.productContent{
+    overflow-y: auto;
+    min-height: 83vh;
+    flex-grow: 1;
+}
+.productContent::-webkit-scrollbar{
+    width: 6px;
+    border-radius: 200px;
+    background: linear-gradient(
+        transparent,
+        rgba(36, 38, 114, 0.11),
+        transparent
+    );
+}
+.productContent::-webkit-scrollbar-thumb{
+    background:  rgba(36, 39, 114, 0.22);
+    border-radius: 200px;
+}
+@media screen and (max-width: 1368px){
+    aside{
+        min-width: 0 !important;
+        max-width: 80px !important;
+    }
+}
+
+@media screen and (max-height: 1140px){
+    .productContent{
+        min-height: 82vh;
+    }
+}
+@media screen and (max-height: 980px){
+    .productContent{
+        min-height: 80vh;
+    }
+}
+@media screen and (max-height: 850px){
+    .main-content{
+        max-height: 88vh !important;
+        min-height: 0 !important;
+    }
+    .productContent{
+        min-height: 70vh;
+    }
+}
+
+@keyframes backgroundInimate{
+    0% {
+        background-position: 0% 100%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}
