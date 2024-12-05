@@ -79,6 +79,11 @@ body::-webkit-scrollbar-thumb{
     background:  rgba(36, 39, 114, 0.22);
     border-radius: 200px;
 }
+.backButton{
+    position: absolute;
+    right: 8px;
+    cursor: pointer;
+}
 @media screen and (max-width: 1368px){
     aside{
         min-width: 0 !important;
@@ -87,7 +92,7 @@ body::-webkit-scrollbar-thumb{
 }
 @media screen and (max-width: 980px){
     aside{
-        position: fixed;
+        position: fixed !important;
         left: 0;
         top: 0;
         max-width: none !important;
