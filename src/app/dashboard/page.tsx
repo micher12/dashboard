@@ -12,6 +12,8 @@ export default function Home() {
   const [blob, setBlob] = useState<PutBlobResult | null>(null);
   const [blobs, setBlobs] = useState<ListBlobResult | null>(null);
 
+
+
   useEffect(()=>{
     async function updateBlobs(){
       const api = await fetch(`api/getblob`,{method:"POST"});

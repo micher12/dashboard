@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ProductsAll from "./products/products_all";
+import ProductsActive from "./products/products_active";
 
 export default function ProdutosUI(){
 
@@ -33,7 +35,8 @@ export default function ProdutosUI(){
             </div>
             </div>
             <div className="mt-3 productContent">
-                
+                {selected === "" && <ProductsAll />}
+                {selected === "active" && <ProductsActive />}
             </div>
         </div>
     )

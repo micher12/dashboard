@@ -85,7 +85,20 @@ body::-webkit-scrollbar-thumb{
         max-width: 80px !important;
     }
 }
+@media screen and (max-width: 980px){
+    aside{
+        position: fixed;
+        left: 0;
+        top: 0;
+        max-width: none !important;
+        width: 18rem;
+    }
+}
 
+
+
+
+/* HEIGHT */
 @media screen and (max-height: 1140px){
     .productContent{
         min-height: 82vh;
