@@ -90,7 +90,7 @@ export default function AsideBar(){
         {loading ? 
         <aside></aside>
         :
-        <aside className="flex flex-col justify-start gap-5 items-center min-w-72 py-10 min-h-screen asideStyle shadown px-3 relative">
+        <aside className="flex flex-col justify-start gap-5 items-center min-w-72 py-10 min-h-screen asideStyle shadown px-3 relative z-50">
             <BackMobile active={backMobile} />
             <Link href={"/"} >
                 <Image style={{width: "auto"}} priority src={"/icon-black.png"} width={50} height={100} alt="Logo" />
