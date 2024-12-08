@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProductsAll from "./products/products_all";
 import ProductsActive from "./products/products_active";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -71,7 +71,7 @@ export default function ProdutosUI(){
                 <a onClick={(e)=>{updateSelected(e,"archived")}} className={(selected === "archived") ? classSelected : "rounded px-2"} >Arquivado</a>
             </div>
             </div>
-            <div className="mt-3 productContent">
+            <div className="mt-7 productContent p-3">
                 {selected === "" && <ProductsAll />}
                 {selected === "active" && <ProductsActive />}
                 {selected === "pending" && <ProductsPending />}

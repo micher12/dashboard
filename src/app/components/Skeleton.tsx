@@ -3,7 +3,7 @@
 import { FunctionComponent } from "react";
 
 interface SkeletonProps{
-    type: "image" | "header",
+    type: "image" | "header" | "products",
     className?: string
 }
 
@@ -33,6 +33,51 @@ const Skeleton:FunctionComponent<SkeletonProps> = ({type, className}) => {
                 <div className={classe}></div>
             </div>
         );
+    }
+    if(type === "products"){
+        const classe = `bg-slate-300 rounded shadown bg-skeleton h-6 w-28 grow-1`;
+        const mainClass = `border-y py-5 flex justify-between flex-nowrap ${className}`;
+
+        return(
+            <>
+            <div className={mainClass}>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+            </div>
+            <div className={mainClass} >
+            <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+            </div>
+            <div className={mainClass} >
+            <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+            </div>
+            <div className={mainClass} >
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+            </div>
+            </>
+        )
     }
 
 }

@@ -8,6 +8,12 @@
     margin: 0 auto;
     padding: 0 2%;
 }
+.transition{
+    transition: all .4s ease;
+}
+.scale:hover{
+    transform: translateY(-2px) scale(1.02);
+}
 body::-webkit-scrollbar{
     width: 6px;
     border-radius: 200px;
@@ -24,6 +30,15 @@ body::-webkit-scrollbar-thumb{
 .skeleton-image{
     width: 300px;
     height: 200px;
+    background: linear-gradient(45deg, 
+        #cbd5e1, 
+        #f1f5f9,
+        #cbd5e1
+    );
+    background-size: 200% 200%;
+    animation: backgroundInimate .4s linear alternate infinite;
+}
+.bg-skeleton{
     background: linear-gradient(45deg, 
         #cbd5e1, 
         #f1f5f9,
@@ -68,6 +83,7 @@ body::-webkit-scrollbar-thumb{
 }
 .productContent::-webkit-scrollbar{
     width: 6px;
+    height: 6px;
     border-radius: 200px;
     background: linear-gradient(
         transparent,
@@ -116,11 +132,26 @@ body::-webkit-scrollbar-thumb{
 .dropmenu{
     transition: all .4s ease;
 }
+.newProduct input{
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 1px 6px;
+    width: 500px;
+}
 @media screen and (max-width: 1368px){
     aside{
         min-width: 0 !important;
         max-width: 80px !important;
     }
+}
+@media screen and (max-width: 1100px){
+    .skeletonPending{
+        gap: 25px !important;
+    }
+    .skeletonPending div{
+        flex: 0 0 auto;
+    }
+
 }
 @media screen and (max-width: 980px){
     aside{
@@ -129,6 +160,12 @@ body::-webkit-scrollbar-thumb{
         top: 0;
         max-width: none !important;
         width: 18rem;
+    }
+}
+@media screen and (max-width: 860px){
+    .pendingProducts{
+        min-width: 100%;
+        width:max-content;
     }
 }
 @media screen and (max-width: 600px){
@@ -147,6 +184,11 @@ body::-webkit-scrollbar-thumb{
         width: 100%;
         display: block;
         padding: 3px 0.8rem;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .productContent .pendingProducts > div{
+        gap: 60px !important;
     }
 }
 

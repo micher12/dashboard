@@ -71,7 +71,6 @@ const MainContent:FunctionComponent<MainContentProps> = ({ content }) => {
             <header className="px-3 py-5 flex items-center gap-1">
                 <Left_Open_Side />
                 <ul className="w-full">
-                    {/* <Skeleton type="header" /> */}
                     {loading ? 
                     <Skeleton type="header" />
                     :
