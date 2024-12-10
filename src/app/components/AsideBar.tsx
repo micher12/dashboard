@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxesStacked, faHouse } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { act, FunctionComponent, useEffect, useRef, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 
 interface BackButtonProps{
     active: boolean;
@@ -56,11 +56,11 @@ export default function AsideBar(){
 
         window.addEventListener("resize",resize);
 
-        ()=>{
-            return window.removeEventListener("resize",resize);
-        }
-
         setLoading(false);
+
+        return ()=>{
+            window.removeEventListener("resize",resize);
+        }
 
     },[]);
 

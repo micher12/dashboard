@@ -1,6 +1,6 @@
 "use client";
 
-import { FunctionComponent, ReactElement, useEffect, useRef, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Skeleton from "./Skeleton";
 import Left_Open_Side from "./ui/left_open_side";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

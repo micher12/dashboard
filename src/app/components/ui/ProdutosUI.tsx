@@ -12,7 +12,6 @@ export default function ProdutosUI(){
 
     const router = useRouter();
     const [selected,setSelected] = useState("");
-    const [productsOpen, setProductsOpen] = useState(false);
     const classSelected = "bg-neutral-50 shadown rounded px-2";
 
 
