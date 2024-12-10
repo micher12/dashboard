@@ -31,13 +31,15 @@ export default async function getRascunho(req: NextApiRequest, res: NextApiRespo
         }
       })
 
+      const token = process.env.GET_IMAGE_TOKEN;
    
       await Promise.all(ids.map(async (val)=>{
         const api = await fetch(`${process.env.DOMAIN_PATH}api/getimage`,{
           method:"POST",
           body: JSON.stringify({id: val}),
           headers:{
-            "Content-type":"application/json"
+            "Content-type":"application/json",
+            "x-key": `Bearer ${token}`
           }
         })
 
