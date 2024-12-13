@@ -138,6 +138,28 @@ body::-webkit-scrollbar-thumb{
     padding: 1px 6px;
     width: 500px;
 }
+.form_edit_product h2{
+    font-weight: bold;
+    font-size: 20px;
+}
+select{
+    border: 1px solid #8f8f8f;
+    border-radius: 0.25rem;
+}
+.form_edit_product input{
+    outline: none;
+    border: 1px solid #8f8f8f;
+    border-radius: 0.35rem;
+    padding: 2px 8px;
+}
+.form_edit_product input[type=submit]{
+    margin-top: 20px;
+    width: fit-content;
+    border: 0;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 0.3rem 4rem;
+}
 @media screen and (max-width: 1368px){
     aside{
         min-width: 0 !important;

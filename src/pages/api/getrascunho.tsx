@@ -68,6 +68,7 @@ export default async function getRascunho(req: NextApiRequest, res: NextApiRespo
 
       }
 
+      res.setHeader("Cache-Control","s-maxage=10, stale-while-revalidate");
       return res.status(200).json(query);
 
     } catch (error) {

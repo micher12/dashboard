@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import Link from "next/link";
+import React from "react";
 
 interface dataProps{
     id_produto: number,
@@ -55,11 +57,11 @@ export default function ProductsPending(){
     const RenderImage:FunctionComponent<RenderImageInterface> = ({urls})=>{
         if(urls){
             const res = Object.entries(urls).map(([key,val])=>(
-                <>
+                <React.Fragment key={key}>
                 {val.split("produto")[1].split("/")[2].split("-")[0] === "capa" &&
-                    <Image key={key} style={{width: "auto"}} width={50} height={25} src={val} alt="imagem produto" />
+                    <Image accessKey={key} style={{width: "auto"}} width={50} height={25} src={val} alt="imagem produto" />
                 }
-                </>
+                </React.Fragment>
             ))
 
             return(
@@ -96,14 +98,14 @@ export default function ProductsPending(){
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content className="outline-none bg-slate-50 p-3 px-4 rounded-lg shadown font-semibold flex flex-col gap-2">
                         <DropdownMenu.Item>
-                            <div>Visualizar</div>
+                            <div className="cursor-pointer">Visualizar</div>
                         </DropdownMenu.Item>
                         <DropdownMenu.Item>
-                            <div>Editar</div>
+                            <Link href={`/dashboard/produtos/editar?id=${val.id_produto}`} className="cursor-pointer">Editar</Link>
                         </DropdownMenu.Item>
                         <DropdownMenu.Separator className="border border-1"></DropdownMenu.Separator>
                         <DropdownMenu.Item >
-                            <div>Excluir</div>
+                            <div className="cursor-pointer">Excluir</div>
                         </DropdownMenu.Item>
                     </DropdownMenu.Content>
                 </DropdownMenu.Root>

@@ -22,6 +22,7 @@ export default async function upload(req: NextApiRequest, res: NextApiResponse) 
           access: 'public',
       });
 
+      res.setHeader("Cache-Control","s-maxage=10, stale-while-revalidate");
       return res.status(200).json(blob);
 
     } catch (error) {
