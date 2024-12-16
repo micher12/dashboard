@@ -15,8 +15,7 @@ export default async function getimage(req: NextApiRequest, res: NextApiResponse
             if(token === process.env.GET_IMAGE_TOKEN){
                 try {
                     
-             
-                const blobs = await list({ prefix: `produto/${req.body.id}` });
+                    const blobs = await list({ prefix: `produto/${req.body.id}` });
 
                     res.setHeader("Cache-Control","s-maxage=10, stale-while-revalidate");
                     return res.status(200).json(blobs);

@@ -1,9 +1,17 @@
 "use client";
 
-import { useEffect, useState, memo } from "react"
+import { FunctionComponent, useEffect, useState } from "react"
 import getProductReqToken from "../key/getProductReqToken";
 import Skeleton from "../../Skeleton";
 import getCategoriaReqToken from "../key/getCategoriaReqToken";
+import Zoom from "react-medium-image-zoom";
+import 'react-medium-image-zoom/dist/styles.css'
+import getImageReqToken from "../key/getImageReqToken";
+import Image from "next/image";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 interface ProductData{
     ativado_produto: boolean,
@@ -20,6 +28,13 @@ interface ProductData{
 
 interface CategoriaInterface{
     [key: number]: {id_categoria: number, nome_categoria: string}
+}
+interface ImageInterface {
+    urls: string[]
+}
+
+interface urlImage{
+    url: string
 }
 
 export default function EditProduct(){
@@ -38,6 +53,9 @@ export default function EditProduct(){
     });
     const [categorias, setCategorias] = useState<CategoriaInterface>({
         0:{id_categoria: 0, nome_categoria: ""}
+    });
+    const [images, setImages] = useState<ImageInterface>({
+        urls: []
     });
 
     useEffect(()=>{
@@ -61,11 +79,50 @@ export default function EditProduct(){
 
     }
 
+    const getImages = async (id: number) =>{
+
+        const token = await getImageReqToken();
+
+        const api = await fetch("/api/getimage",{
+            method: "POST",
+            body: JSON.stringify({id: id}),
+            headers:{
+                "Content-type":"application/json",
+                "x-key": `Bearer ${token}`,
+            }
+        });
+
+        const status = api.status;
+        const response = await api.json();
+
+        if(status === 200 && response.blobs){
+            if(response.blobs.length > 0){
+                const urls: string[] = [];
+
+                for(const preUrl of response.blobs.slice(1)){
+                    const url: string = preUrl.url;
+                    urls.push(url);
+                }
+
+                setImages((prev)=>({...prev, urls}))
+            }
+
+        }
+
+        
+
+    }
+
     const getData = async ()=>{
+
         const path = document.location.href;
 
         if(path.includes("?") && path.split("?")[1].includes("id=")){
             const id = path.split("id=")[1];
+
+            await getCategorias();
+            await getImages(parseInt(id));
+
             const token = await getProductReqToken();
             const api = await fetch("/api/getproduct",{
                 method: "POST",
@@ -81,7 +138,6 @@ export default function EditProduct(){
 
             if(status === 200 && response.sucesso === "ok"){
                 setData(response.data[0]);
-                getCategorias();
             }
 
         }
@@ -92,9 +148,11 @@ export default function EditProduct(){
         e.preventDefault();
         const {name, value} = e.target;
 
-        if(name === "preco_produto"){
+        if(name === "preco_produto" || name === "quantidade_estoque"){
             const finalVal = value.replace(/[^0-9]/g, "");
-            setData((prev)=>({...prev, [name]: parseInt(finalVal)}))
+            const intVal = isNaN(parseInt(finalVal)) ? "0" : parseInt(finalVal);
+
+            setData((prev)=>({...prev, [name]: intVal}))
         }else{
             setData((prev)=>({...prev, [name]: value}))
         }   
@@ -112,12 +170,109 @@ export default function EditProduct(){
         )
     }
 
+    function DeleteImage(url: string){
+
+        console.log(url)
+    }
+
+    const DotsImage:FunctionComponent<urlImage> = ({url})=>{
+        return(
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger className="outline-none">
+                    <div className="cursor-pointer text-slate-50">{<FontAwesomeIcon icon={faEllipsis} />}</div>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content className="outline-none bg-slate-50 p-3 px-4 rounded-lg shadown font-semibold flex flex-col gap-2">
+                    <AlertDialog.Root>
+                        <AlertDialog.Trigger>
+                            deletar
+                        </AlertDialog.Trigger>
+                        <AlertDialog.Portal>
+                            <AlertDialog.Overlay className="AlertDialogOverlay" />
+                            <AlertDialog.Content className="AlertDialogContent">
+                            <AlertDialog.Title className="font-bold text-xl">
+                                Você realmente tem certeza dessa ação ?
+                            </AlertDialog.Title>
+                            <AlertDialog.Description className="mt-1">
+                                Após confirmar está ação, NÃO será possível reverter ou recuperar o conteúdo. 
+                            </AlertDialog.Description>
+                            <div className="mt-3" style={{ display: "flex", gap: 25, justifyContent: "flex-end" }}>
+                                <AlertDialog.Cancel asChild>
+                                <button className="Button mauve">Cancelar</button>
+                                </AlertDialog.Cancel>
+                                <AlertDialog.Action asChild>
+                                    <button onClick={(e)=>DeleteImage(url)} className="bg-red-500 font-semibold text-slate-50 px-3 rounded text-lg">Deletar</button>
+                                </AlertDialog.Action>
+                            </div>
+                            </AlertDialog.Content>
+                        </AlertDialog.Portal>
+                    </AlertDialog.Root>
+
+                    
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+        )
+    }
+
+    function RenderImages(){
+
+        const finalUrls: string[] = [];
+
+        if(images.urls.length > 0){
+            Object.entries(images.urls).map(([key,val])=>{
+                if(val.includes("capa"))
+                    finalUrls.push(val);
+            });
+
+            Object.entries(images.urls).map(([key,val])=>{
+                if(!val.includes("capa"))
+                    finalUrls.push(val);
+            })
+
+        }
+
+        if(finalUrls.length > 0)
+            return(
+                <div className="flex gap-6 justify-start relative p-3">
+
+                    <div className="flex flex-col gap-3 bg-neutral-800 p-2 rounded-lg shadown">
+                        <div style={{maxWidth: "80px"}} > 
+                            <Zoom >
+                            <Image priority className="rounded-lg" width={500} height={500} alt="imagem" src={finalUrls[0]} />
+                            </Zoom>
+                        </div>
+                        <DotsImage url={finalUrls[0]} />
+            
+                    </div>
+                    
+                        {Object.entries(finalUrls).slice(1).map(([key,val])=>(
+                            <>
+                            <div className="min-h-full bg-slate-200 rounded-2xl w-0.5"></div>
+                            <div className="flex flex-col gap-3 bg-neutral-800 p-2 rounded-lg shadown">
+                                <div key={key} style={{maxWidth: "80px"}}>
+                                    <Zoom >
+                                        <Image priority className="rounded-lg" width={500} height={500} alt="imagem" src={val} />
+                                    </Zoom>
+                                </div>
+                                <DotsImage url={val} />
+                            </div>
+                            </>
+                        ))}
+                    
+
+                </div>
+            )
+    }
+
     return(
         <>
         {data.id_produto == 0 ?
-        <Skeleton type="image" /> //criar o type correto depois
+        <Skeleton type="edit_product" /> //criar o type correto depois
         :
-        <form className="w-full flex flex-col form_edit_product gap-5">
+        <div className="flex flex-col productContainer">
+        <div className="mt-7 productContent p-3">
+
+        <RenderImages />
+        <form className="w-full flex flex-col form_edit_product gap-5 mt-10">
             <input type="hidden" name="id_produto" value={data.id_produto} />
             <input type="hidden" name="prod_produto" value={data.prod_produto} />
             <div>
@@ -131,6 +286,10 @@ export default function EditProduct(){
             <div>
                 <h2>{`Preço: R$${(data.preco_produto/100).toString().replace(".",",")}`}</h2>
                 <input onChange={ChangeInput} type="text" name="preco_produto" value={data?.preco_produto.toString()} />
+            </div>
+            <div>
+                <h2>Quantidade em estoque: </h2>
+                <input onChange={ChangeInput} type="text" name="quantidade_estoque" value={data?.quantidade_estoque}/>
             </div>
             <div>
                 <h2>Categoria: </h2>
@@ -155,6 +314,8 @@ export default function EditProduct(){
 
             <input type="submit" value={"ATUALIZAR"} className="cursor-pointer bg-blue-500 text-slate-50 transition scale hover:bg-blue-400" />
         </form>
+        </div>
+        </div>
         }
         </>
     )
