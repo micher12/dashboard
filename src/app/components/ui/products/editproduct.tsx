@@ -12,6 +12,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 interface ProductData{
     ativado_produto: boolean,
@@ -29,13 +30,21 @@ interface ProductData{
 interface CategoriaInterface{
     [key: number]: {id_categoria: number, nome_categoria: string}
 }
-interface ImageInterface {
-    urls: string[]
-}
 
 interface urlImage{
     url: string
 }
+
+interface ImagesInterface{
+
+    downloadUr: string,
+    pathname: string,
+    size: number,
+    uploadedAt: string,
+    url: string
+    
+}
+
 
 export default function EditProduct(){
 
@@ -54,9 +63,15 @@ export default function EditProduct(){
     const [categorias, setCategorias] = useState<CategoriaInterface>({
         0:{id_categoria: 0, nome_categoria: ""}
     });
-    const [images, setImages] = useState<ImageInterface>({
-        urls: []
-    });
+    const [images, setImages] = useState<ImagesInterface[]>([{
+       
+        downloadUr:"",
+        pathname:"",
+        size: 0,
+        uploadedAt:"",
+        url:""
+        
+    }]);
 
     useEffect(()=>{
         getData();
@@ -97,14 +112,14 @@ export default function EditProduct(){
 
         if(status === 200 && response.blobs){
             if(response.blobs.length > 0){
-                const urls: string[] = [];
+                const urls: ImagesInterface[] = [];
 
                 for(const preUrl of response.blobs.slice(1)){
-                    const url: string = preUrl.url;
+                    const url: ImagesInterface = preUrl;
                     urls.push(url);
                 }
 
-                setImages((prev)=>({...prev, urls}))
+                setImages(urls)
             }
 
         }
@@ -200,7 +215,7 @@ export default function EditProduct(){
                                 <button className="Button mauve">Cancelar</button>
                                 </AlertDialog.Cancel>
                                 <AlertDialog.Action asChild>
-                                    <button onClick={(e)=>DeleteImage(url)} className="bg-red-500 font-semibold text-slate-50 px-3 rounded text-lg">Deletar</button>
+                                    <button onClick={()=>DeleteImage(url)} className="bg-red-500 font-semibold text-slate-50 px-3 rounded text-lg">Deletar</button>
                                 </AlertDialog.Action>
                             </div>
                             </AlertDialog.Content>
@@ -216,18 +231,32 @@ export default function EditProduct(){
     function RenderImages(){
 
         const finalUrls: string[] = [];
+        const capaId: string[] = [];
 
-        if(images.urls.length > 0){
-            Object.entries(images.urls).map(([key,val])=>{
-                if(val.includes("capa"))
-                    finalUrls.push(val);
+        if(images.length > 0 && images[0].url != ""){
+            Object.entries(images).map(([, val])=>{
+                const image = val as ImagesInterface;
+                
+                if(image.pathname.includes("capa_"))
+                    capaId.push(image.pathname.split("capa_")[1].split(".")[0]);
             });
 
-            Object.entries(images.urls).map(([key,val])=>{
-                if(!val.includes("capa"))
-                    finalUrls.push(val);
-            })
+            if(capaId.length > 0){
+                Object.entries(images).map(([, val])=>{
+                    const image = val as ImagesInterface;
+                    if(!image.pathname.includes("capa_") && image.pathname.includes(capaId[0])){
+                        finalUrls.push(image.url);
+                    }
+                });
+            }
 
+            Object.entries(images).map(([, val])=>{
+                const image = val as ImagesInterface;
+
+                if(!finalUrls[0].includes(image.url) && !image.pathname.includes("capa_")){
+                    finalUrls.push(image.url);
+                }
+            });
         }
 
         if(finalUrls.length > 0)
@@ -245,17 +274,17 @@ export default function EditProduct(){
                     </div>
                     
                         {Object.entries(finalUrls).slice(1).map(([key,val])=>(
-                            <>
+                            <React.Fragment key={key}>
                             <div className="min-h-full bg-slate-200 rounded-2xl w-0.5"></div>
                             <div className="flex flex-col gap-3 bg-neutral-800 p-2 rounded-lg shadown">
-                                <div key={key} style={{maxWidth: "80px"}}>
+                                <div  style={{maxWidth: "80px"}}>
                                     <Zoom >
                                         <Image priority className="rounded-lg" width={500} height={500} alt="imagem" src={val} />
                                     </Zoom>
                                 </div>
                                 <DotsImage url={val} />
                             </div>
-                            </>
+                            </React.Fragment>
                         ))}
                     
 
@@ -264,32 +293,31 @@ export default function EditProduct(){
     }
 
     return(
-        <>
+        <div className="flex flex-col productContainer">
+        <div className="mt-7 productContent p-3">
         {data.id_produto == 0 ?
         <Skeleton type="edit_product" /> //criar o type correto depois
         :
-        <div className="flex flex-col productContainer">
-        <div className="mt-7 productContent p-3">
-
+        <>
         <RenderImages />
         <form className="w-full flex flex-col form_edit_product gap-5 mt-10">
-            <input type="hidden" name="id_produto" value={data.id_produto} />
-            <input type="hidden" name="prod_produto" value={data.prod_produto} />
+            <input type="hidden" name="id_produto" value={data.id_produto || ""} />
+            <input type="hidden" name="prod_produto" value={data.prod_produto || ""} />
             <div>
                 <h2>Nome: </h2>
-                <input onChange={ChangeInput} type="text" name="nome_produto" value={data?.nome_produto.toString()} />
+                <input onChange={ChangeInput} type="text" name="nome_produto" value={data.nome_produto || ""} />
             </div>
             <div>
                 <h2>Descrição: </h2>
-                <input onChange={ChangeInput} type="text" name="descricao_produto" value={data?.descricao_produto.toString()} />
+                <input onChange={ChangeInput} type="text" name="descricao_produto" value={data.descricao_produto || ""} />
             </div>
             <div>
                 <h2>{`Preço: R$${(data.preco_produto/100).toString().replace(".",",")}`}</h2>
-                <input onChange={ChangeInput} type="text" name="preco_produto" value={data?.preco_produto.toString()} />
+                <input onChange={ChangeInput} type="text" name="preco_produto" value={data.preco_produto || 0} />
             </div>
             <div>
                 <h2>Quantidade em estoque: </h2>
-                <input onChange={ChangeInput} type="text" name="quantidade_estoque" value={data?.quantidade_estoque}/>
+                <input onChange={ChangeInput} type="text" name="quantidade_estoque" value={data.quantidade_estoque || 0}/>
             </div>
             <div>
                 <h2>Categoria: </h2>
@@ -300,23 +328,23 @@ export default function EditProduct(){
             <div>
                 <h2>Produto Ativado: </h2>
                 <select name="ativado_produto" >
-                    <option value={`${data?.ativado_produto}`} defaultValue={"false"}>{`${data?.ativado_produto === true ? "sim" : "não"}`}</option>
-                    <option value={`${!data?.ativado_produto}`}>{`${!data?.ativado_produto === true ? "sim" : "não"}`}</option>
+                    <option value={`${data.ativado_produto} || true`} defaultValue={"false"}>{`${data.ativado_produto === true ? "sim" : "não"}`}</option>
+                    <option value={`${!data.ativado_produto}`}>{`${!data.ativado_produto === true ? "sim" : "não"}`}</option>
                 </select>
             </div>
             <div>
                 <h2>Produto em rascunho: </h2>
                 <select name="rascunho_produto" >
-                    <option value={`${data?.rascunho_produto}`} defaultValue={"true"}>{`${data?.rascunho_produto === true ? "sim" : "não"}`}</option>
-                    <option value={`${!data?.rascunho_produto}`}>{`${!data?.rascunho_produto === true ? "sim" : "não"}`}</option>
+                    <option value={`${data.rascunho_produto} || true`} defaultValue={"true"}> {`${data.rascunho_produto === true ? "sim" : "não"}`}</option>
+                    <option value={`${!data.rascunho_produto}`}>{`${!data.rascunho_produto === true ? "sim" : "não"}`}</option>
                 </select>
             </div>
 
             <input type="submit" value={"ATUALIZAR"} className="cursor-pointer bg-blue-500 text-slate-50 transition scale hover:bg-blue-400" />
         </form>
-        </div>
-        </div>
-        }
         </>
+        }
+        </div>
+        </div>
     )
 }

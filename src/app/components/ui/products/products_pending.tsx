@@ -55,10 +55,22 @@ export default function ProductsPending(){
     }
 
     const RenderImage:FunctionComponent<RenderImageInterface> = ({urls})=>{
+        const capaId: string[] = [];
+
         if(urls){
+
+            Object.entries(urls).map(([, val])=>{
+                if(val.includes("capa_")){
+                    val.split("capa_")[1].split("-").forEach((val, index)=>{
+                        if(index < 3)
+                            capaId.push(val);
+                    })
+                }
+            });
+
             const res = Object.entries(urls).map(([key,val])=>(
                 <React.Fragment key={key}>
-                {val.split("produto")[1].split("/")[2].split("-")[0] === "capa" &&
+                {(val.includes(capaId[0]) && val.includes(capaId[1]) && val.includes(capaId[2]) && !val.includes("capa_")) &&
                     <Image accessKey={key} style={{width: "auto"}} width={50} height={25} src={val} alt="imagem produto" />
                 }
                 </React.Fragment>

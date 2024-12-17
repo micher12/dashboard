@@ -81,17 +81,28 @@ const Skeleton:FunctionComponent<SkeletonProps> = ({type, className}) => {
     }
     if(type === "edit_product"){
         const classe = `bg-slate-300 rounded bg-skeleton h-10`;
+        const imageClass = `bg-slate-300 rounded-lg bg-skeleton w-40 h-40`;
 
         return(
-            <div className="flex flex-col gap-12">
-            <div className={classe}></div>
-            <div className={classe}></div>
-            <div className={classe}></div>
-            <div className={classe}></div>
-            <div className={classe}></div>
-            <div className={classe}></div>
-            <div className={classe}></div>
+            <>
+            <div className="flex items-center gap-16 justify-start flex-wrap">
+                <div className={imageClass}></div>
+                <div className={imageClass}></div>
+                <div className={imageClass}></div>
+                <div className={imageClass}></div>
+                <div className={imageClass}></div>
+                <div className={imageClass}></div>
             </div>
+            <div className="flex flex-col gap-12 mt-8">
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+            </div>
+            </>
         )
     }
 
