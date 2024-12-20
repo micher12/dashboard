@@ -183,12 +183,28 @@ export default function EditProduct(){
     }
 
     function RenderCategorias(){
+
         const res = Object.entries(categorias).map(([key,val])=>(
-            <option key={key} value={val.id_categoria} >{val.nome_categoria}</option>
+            <React.Fragment key={key}>
+            {val.id_categoria == data.id_categoria &&
+                <option value={val.id_categoria}  >{val.nome_categoria}</option>
+            }
+            </React.Fragment>
+        ));
+
+        const res2 = Object.entries(categorias).map(([key,val])=>(
+            <React.Fragment key={key}>
+                {val.id_categoria != data.id_categoria &&
+                    <option value={val.id_categoria}  >{val.nome_categoria}</option>
+                }
+            </React.Fragment>
         ))
 
         return(
-            res
+            <>
+            {res}
+            {res2}
+            </>
         )
     }
 
@@ -333,6 +349,7 @@ export default function EditProduct(){
             setAlertType("sucesso")
             setAlertMessage("Produto atualizado com sucesso!")
             limpaAlert();
+            getData();
         }else{
             setAlertType("erro")
             setAlertMessage("Algo deu errado!")
