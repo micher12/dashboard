@@ -13,12 +13,14 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import { useRouter } from "next/navigation";
+import getUpdateProductToken from "../key/getUpdateProductToken";
+import AlertUI from "@/app/components/ui/AlertUI";
 
 interface ProductData{
     ativado_produto: boolean,
     descricao_produto: string,
     id_produto: number,
-    nome_categoria: string,
     nome_produto: string,
     preco_produto: number,
     prod_produto: string,
@@ -52,7 +54,6 @@ export default function EditProduct(){
         ativado_produto: false,
         descricao_produto: "",
         id_produto: 0,
-        nome_categoria: "",
         nome_produto: "",
         preco_produto: 0,
         prod_produto: "",
@@ -72,6 +73,10 @@ export default function EditProduct(){
         url:""
         
     }]);
+    const [alertType, setAlertType] = useState<"sucesso" | "erro" | null>(null);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+
+    const router = useRouter();
 
     useEffect(()=>{
         getData();
@@ -153,6 +158,8 @@ export default function EditProduct(){
 
             if(status === 200 && response.sucesso === "ok"){
                 setData(response.data[0]);
+            }else{
+                router.push("/dashboard/produtos?peding");
             }
 
         }
@@ -261,7 +268,7 @@ export default function EditProduct(){
 
         if(finalUrls.length > 0)
             return(
-                <div className="flex gap-6 justify-start relative p-3">
+                <div className="flex gap-6 justify-start relative p-3 min-w-max">
 
                     <div className="flex flex-col gap-3 bg-neutral-800 p-2 rounded-lg shadown">
                         <div style={{maxWidth: "80px"}} > 
@@ -292,6 +299,48 @@ export default function EditProduct(){
             )
     }
 
+    function limpaAlert(){
+        setTimeout(()=>{
+            setAlertMessage("");
+            setAlertType(null);
+        },3800);
+    }
+
+    async function updateTable(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        const token = await getUpdateProductToken();
+        const obj = new FormData(e.target as HTMLFormElement);
+        const DateForm: any = {};
+
+        obj.forEach((val,key)=>{
+            DateForm[key] = val;
+        })
+
+        const api = await fetch("/api/updateproduct",{
+            method: "POST",
+            body: JSON.stringify(DateForm),
+            headers:{
+                "Content-type":"application/json",
+                "x-key":`Bearer ${token}`,
+            }
+        });
+
+        const status = api.status;
+        const response = await api.json();
+
+        if(status === 200){
+            setAlertType("sucesso")
+            setAlertMessage("Produto atualizado com sucesso!")
+            limpaAlert();
+        }else{
+            setAlertType("erro")
+            setAlertMessage("Algo deu errado!")
+            limpaAlert();
+        }
+
+    }
+
     return(
         <div className="flex flex-col productContainer">
         <div className="mt-7 productContent p-3">
@@ -300,7 +349,7 @@ export default function EditProduct(){
         :
         <>
         <RenderImages />
-        <form className="w-full flex flex-col form_edit_product gap-5 mt-10">
+        <form method="POST" onSubmit={updateTable} className="w-full flex flex-col form_edit_product gap-5 mt-10">
             <input type="hidden" name="id_produto" value={data.id_produto || ""} />
             <input type="hidden" name="prod_produto" value={data.prod_produto || ""} />
             <div>
@@ -328,20 +377,22 @@ export default function EditProduct(){
             <div>
                 <h2>Produto Ativado: </h2>
                 <select name="ativado_produto" >
-                    <option value={`${data.ativado_produto} || true`} defaultValue={"false"}>{`${data.ativado_produto === true ? "sim" : "não"}`}</option>
+                    <option value={`${data.ativado_produto || true} `} defaultValue={"false"}>{`${data.ativado_produto === true ? "sim" : "não"}`}</option>
                     <option value={`${!data.ativado_produto}`}>{`${!data.ativado_produto === true ? "sim" : "não"}`}</option>
                 </select>
             </div>
             <div>
                 <h2>Produto em rascunho: </h2>
                 <select name="rascunho_produto" >
-                    <option value={`${data.rascunho_produto} || true`} defaultValue={"true"}> {`${data.rascunho_produto === true ? "sim" : "não"}`}</option>
+                    <option value={`${data.rascunho_produto || true} `} defaultValue={"true"}> {`${data.rascunho_produto === true ? "sim" : "não"}`}</option>
                     <option value={`${!data.rascunho_produto}`}>{`${!data.rascunho_produto === true ? "sim" : "não"}`}</option>
                 </select>
             </div>
 
             <input type="submit" value={"ATUALIZAR"} className="cursor-pointer bg-blue-500 text-slate-50 transition scale hover:bg-blue-400" />
+            
         </form>
+        <AlertUI type={alertType} message={alertMessage} />
         </>
         }
         </div>

@@ -179,7 +179,13 @@ select{
     z-index: 1001;
     pointer-events: auto;
 }
-  
+.alertSucesso{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+}  
+
 @media screen and (max-width: 1368px){
     aside{
         min-width: 0 !important;
@@ -208,6 +214,11 @@ select{
     .pendingProducts{
         min-width: 100%;
         width:max-content;
+    }
+}
+@media screen and (max-width: 720px){
+    .AlertDialogContent{
+        width: 92%;
     }
 }
 @media screen and (max-width: 600px){

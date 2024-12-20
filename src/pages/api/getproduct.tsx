@@ -23,6 +23,9 @@ export default async function getproduct(req: NextApiRequest, res: NextApiRespon
                 LEFT JOIN categoria as c ON p.id_categoria = c.id_categoria
                 WHERE p.id_produto = ${body.id_produto}
             `);
+
+            if(query.length === 0)
+                return res.status(404).json({erro: "produto não localizado."})
             
             res.setHeader("Cache-Control","s-maxage=10, stale-while-revalidate");
             return res.status(200).json({sucesso: "ok", data: query})

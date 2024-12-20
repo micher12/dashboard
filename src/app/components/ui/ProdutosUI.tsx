@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductsAll from "./products/products_all";
 import ProductsActive from "./products/products_active";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -13,7 +13,6 @@ export default function ProdutosUI(){
     const router = useRouter();
     const [selected,setSelected] = useState("");
     const classSelected = "bg-neutral-50 shadown rounded px-2";
-
 
 
     function updateSelected(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, query: string | null){

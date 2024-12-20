@@ -20,7 +20,7 @@ export default async function getRascunho(req: NextApiRequest, res: NextApiRespo
       LEFT JOIN estoque as e ON e.id_produto = p.id_produto
       LEFT JOIN categoria as c ON p.id_categoria = c.id_categoria
       WHERE p.rascunho_produto = ${rascunho}
-      `);
+      `); 
 
       const ids: number[] = [];
       const urls: UlrsInterface[] = [];
