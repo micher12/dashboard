@@ -8,6 +8,15 @@ interface UlrsInterface{
 
 export default async function getRascunho(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
+    const header = req.headers;
+    if(!header["x-key"])
+      return res.status(401).json({erro:"Inválido!"})
+
+    const key = header["x-key"].toString().split("Bearer ")[1];
+
+    if(key != process.env.GET_RASCUNHO)
+      return res.status(401).json({errro: "Inválido!"})
+
     try {
 
       const sql = neon(`${process.env.DATABASE_URL}`);
