@@ -16,6 +16,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import getUpdateProductToken from "../key/getUpdateProductToken";
 import AlertUI from "@/app/components/ui/AlertUI";
+import SenderFileUI from "../SenderFileUI";
 
 interface ProductData{
     ativado_produto: boolean,
@@ -75,6 +76,7 @@ export default function EditProduct(){
     }]);
     const [alertType, setAlertType] = useState<"sucesso" | "erro" | null>(null);
     const [alertMessage, setAlertMessage] = useState<string>("");
+    const [files, setFiles] = useState<FileList | null>(null);
 
     const router = useRouter();
 
@@ -333,29 +335,33 @@ export default function EditProduct(){
             DateForm[key] = val;
         })
 
-        const api = await fetch("/api/updateproduct",{
-            method: "POST",
-            body: JSON.stringify(DateForm),
-            headers:{
-                "Content-type":"application/json",
-                "x-key":`Bearer ${token}`,
-            }
-        });
+        // const api = await fetch("/api/updateproduct",{
+        //     method: "POST",
+        //     body: JSON.stringify(DateForm),
+        //     headers:{
+        //         "Content-type":"application/json",
+        //         "x-key":`Bearer ${token}`,
+        //     }
+        // });
 
-        const status = api.status;
-        const response = await api.json();
+        // const status = api.status;
+        // const response = await api.json();
 
-        if(status === 200){
-            setAlertType("sucesso")
-            setAlertMessage("Produto atualizado com sucesso!")
-            limpaAlert();
-            getData();
-        }else{
-            setAlertType("erro")
-            setAlertMessage("Algo deu errado!")
-            limpaAlert();
-        }
+        // if(status === 200){
+        //     setAlertType("sucesso")
+        //     setAlertMessage("Produto atualizado com sucesso!")
+        //     limpaAlert();
+        //     getData();
+        // }else{
+        //     setAlertType("erro")
+        //     setAlertMessage("Algo deu errado!")
+        //     limpaAlert();
+        // }
 
+    }
+
+    function chnageFile(newFiles: FileList | null): void {
+        setFiles(newFiles);
     }
 
     return(
@@ -404,6 +410,10 @@ export default function EditProduct(){
                     <option value={`${data.rascunho_produto || true} `} defaultValue={"true"}> {`${data.rascunho_produto === true ? "sim" : "não"}`}</option>
                     <option value={`${!data.rascunho_produto}`}>{`${!data.rascunho_produto === true ? "sim" : "não"}`}</option>
                 </select>
+            </div>
+
+            <div>
+                <SenderFileUI changeFiles={chnageFile} />
             </div>
 
             <input type="submit" value={"ATUALIZAR"} className="cursor-pointer bg-blue-500 text-slate-50 transition scale hover:bg-blue-400" />
