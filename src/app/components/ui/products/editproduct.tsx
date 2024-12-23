@@ -277,12 +277,19 @@ export default function EditProduct(){
 
             Object.entries(images).map(([, val])=>{
                 const image = val as ImagesInterface;
-
-                if(!finalUrls[0].includes(image.url) && !image.pathname.includes("capa_")){
+                
+                if(finalUrls.length > 0){
+                    if(!finalUrls[0].includes(image.url) && !image.pathname.includes("capa_")){
+                        finalUrls.push(image.url);
+                    }
+                }
+                else{
                     finalUrls.push(image.url);
                 }
+                    
             });
         }
+
 
         if(finalUrls.length > 0)
             return(
@@ -335,6 +342,25 @@ export default function EditProduct(){
             DateForm[key] = val;
         })
 
+        if(files)
+        
+
+        if(files && files.length > 0){
+            const imageData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                imageData.append("files", files[i]); // 'files' é o nome do campo no servidor
+            }
+
+            imageData.append("id_produto", DateForm.id_produto);
+
+            const imageUp = await fetch("/api/upload",{
+                method: "POST",
+                body: imageData,
+            });
+
+
+        }
+        
         // const api = await fetch("/api/updateproduct",{
         //     method: "POST",
         //     body: JSON.stringify(DateForm),

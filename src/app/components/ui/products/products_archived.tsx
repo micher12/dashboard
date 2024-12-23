@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import RenderProductAdminUI from "./RenderProductAdminUI";
 import Skeleton from "../../Skeleton";
+import getArchivedReqToken from "../key/getArchivedReqToken";
 
 interface dataProps{
     id_produto: number,
@@ -24,11 +25,13 @@ export default function ProdutcsArchived(){
     },[]);
 
     async function getData() {
+        const token = await getArchivedReqToken();
+
         const api = await fetch("/api/getarchived",{
             method: "POST",
             headers:{
                 "Content-type":"application/json",
-                "x-key": `Bearer `,
+                "x-key": `Bearer ${token}`,
             }
         })
 

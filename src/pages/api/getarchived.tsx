@@ -10,6 +10,16 @@ interface UlrsInterface{
 export default async function getArchived(req: NextApiRequest, res: NextApiResponse){
 
     if (req.method === 'POST') {
+        const header = req.headers;
+
+        if(!header["x-key"])
+            return res.status(401).json({erro: "Inválido!"})
+
+        const key = header["x-key"].toString().split("Bearer ")[1];
+
+        if(key != process.env.GET_ARCHIVED)
+            return res.status(401).json({erro: "Inválido!"})
+
         try {
         
             const sql = neon(`${process.env.DATABASE_URL}`);
