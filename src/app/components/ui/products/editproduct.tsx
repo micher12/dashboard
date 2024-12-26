@@ -17,6 +17,8 @@ import { useRouter } from "next/navigation";
 import getUpdateProductToken from "../key/getUpdateProductToken";
 import AlertUI from "@/app/components/ui/AlertUI";
 import SenderFileUI from "../SenderFileUI";
+import getUploadReqToken from "../key/getUploadReqToken";
+import getDeleteImageReqToken from "../key/getDeleteImageReqToken";
 
 interface ProductData{
     ativado_produto: boolean,
@@ -121,7 +123,7 @@ export default function EditProduct(){
             if(response.blobs.length > 0){
                 const urls: ImagesInterface[] = [];
 
-                for(const preUrl of response.blobs.slice(1)){
+                for(const preUrl of response.blobs){
                     const url: ImagesInterface = preUrl;
                     urls.push(url);
                 }
@@ -210,9 +212,32 @@ export default function EditProduct(){
         )
     }
 
-    function DeleteImage(url: string){
+    async function DeleteImage(url: string){
 
-        console.log(url)
+        const token = await getDeleteImageReqToken();
+
+        const api = await fetch("/api/deleteimage",{
+            method: "POST",
+            body: JSON.stringify({url: url}),
+            headers:{
+                "Content-type":"application/json",
+                "x-key":`Bearer ${token}`,
+            }
+        });
+
+        const status = api.status;
+        const response = await api.json();
+
+        if(status === 200 && response.sucesso === "ok"){
+            setAlertType("sucesso")
+            setAlertMessage("Imagem excluída com sucesso!")
+            limpaAlert();
+        }else{
+            setAlertType("erro")
+            setAlertMessage("Não foi possível enviar a imagem!")
+            limpaAlert();
+        }
+
     }
 
     const DotsImage:FunctionComponent<urlImage> = ({url})=>{
@@ -278,7 +303,7 @@ export default function EditProduct(){
             Object.entries(images).map(([, val])=>{
                 const image = val as ImagesInterface;
                 
-                if(finalUrls.length > 0){
+                if(finalUrls.length > 0 && capaId.length > 0){
                     if(!finalUrls[0].includes(image.url) && !image.pathname.includes("capa_")){
                         finalUrls.push(image.url);
                     }
@@ -342,9 +367,6 @@ export default function EditProduct(){
             DateForm[key] = val;
         })
 
-        if(files)
-        
-
         if(files && files.length > 0){
             const imageData = new FormData();
             for (let i = 0; i < files.length; i++) {
@@ -353,36 +375,55 @@ export default function EditProduct(){
 
             imageData.append("id_produto", DateForm.id_produto);
 
+            const token = await getUploadReqToken();
+            
             const imageUp = await fetch("/api/upload",{
                 method: "POST",
                 body: imageData,
+                headers:{
+                    "x-key": `Bearer ${token}`
+                }
             });
 
+            const imageStatus = imageUp.status;
 
+            if(imageStatus != 200){
+                setAlertType("erro")
+                setAlertMessage("Não foi possível enviar a imagem!")
+                limpaAlert();
+                return;
+            }
+                
         }
         
-        // const api = await fetch("/api/updateproduct",{
-        //     method: "POST",
-        //     body: JSON.stringify(DateForm),
-        //     headers:{
-        //         "Content-type":"application/json",
-        //         "x-key":`Bearer ${token}`,
-        //     }
-        // });
+        const api = await fetch("/api/updateproduct",{
+            method: "POST",
+            body: JSON.stringify(DateForm),
+            headers:{
+                "Content-type":"application/json",
+                "x-key":`Bearer ${token}`,
+            }
+        });
 
-        // const status = api.status;
-        // const response = await api.json();
+        const status = api.status;
+        const response = await api.json();
 
-        // if(status === 200){
-        //     setAlertType("sucesso")
-        //     setAlertMessage("Produto atualizado com sucesso!")
-        //     limpaAlert();
-        //     getData();
-        // }else{
-        //     setAlertType("erro")
-        //     setAlertMessage("Algo deu errado!")
-        //     limpaAlert();
-        // }
+        if(status === 200 && response.sucesso === "ok"){
+            setAlertType("sucesso")
+            setAlertMessage("Produto atualizado com sucesso!")
+            limpaAlert();
+            getData();
+        }else{
+            if(status === 500 && response.erro === "Dados inválidos!"){
+                setAlertType("erro")
+                setAlertMessage(response.erro)
+                limpaAlert();
+                return;
+            }
+            setAlertType("erro")
+            setAlertMessage("Algo deu errado!")
+            limpaAlert();
+        }
 
     }
 

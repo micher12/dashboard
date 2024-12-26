@@ -34,6 +34,8 @@ const RenderProductAdminUI:FunctionComponent<RenderProduct> = ({data})=>{
     const RenderImage:FunctionComponent<RenderImageInterface> = ({urls})=>{
         const capaId: string[] = [];
 
+        
+
         if(urls){
 
             Object.entries(urls).map(([, val])=>{
@@ -45,18 +47,27 @@ const RenderProductAdminUI:FunctionComponent<RenderProduct> = ({data})=>{
                 }
             });
 
-            const res = Object.entries(urls).map(([key,val])=>(
-                <React.Fragment key={key}>
-                {(val.includes(capaId[0]) && val.includes(capaId[1]) && val.includes(capaId[2]) && !val.includes("capa_")) &&
-                    <Image accessKey={key} style={{width: "auto"}} width={50} height={25} src={val} alt="imagem produto" />
-                }
-                </React.Fragment>
-            ))
-
-            return(
-                res
-            )
+            if(capaId.length > 0){
+                const res = Object.entries(urls).map(([key,val])=>(
+                    <React.Fragment key={key}>
+                    {(val.includes(capaId[0]) && val.includes(capaId[1]) && val.includes(capaId[2]) && !val.includes("capa_")) &&
+                        <Image accessKey={key} style={{width: "auto"}} width={50} height={25} src={val} alt="imagem produto" />
+                    }
+                    </React.Fragment>
+                ))
+                
+                return(
+                    res
+                )
+            }else{
+                return(
+                    <Image style={{width: "auto"}} width={50} height={25} src={urls[0]} alt="imagem produto" />
+                )
+            };
+         
         }
+
+        
         
     }
 
