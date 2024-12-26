@@ -58,7 +58,7 @@ export default async function getRascunho(req: NextApiRequest, res: NextApiRespo
         if(status === 200){
           if(response && response.blobs.length > 0){
             const preUrls: string[] = [];
-            for(const preUrl of response.blobs.slice(1)){
+            for(const preUrl of response.blobs){
               preUrls.push(preUrl.url);
             }
 

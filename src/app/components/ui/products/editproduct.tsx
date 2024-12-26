@@ -19,6 +19,7 @@ import AlertUI from "@/app/components/ui/AlertUI";
 import SenderFileUI from "../SenderFileUI";
 import getUploadReqToken from "../key/getUploadReqToken";
 import getDeleteImageReqToken from "../key/getDeleteImageReqToken";
+import getSetCapeReqToken from "../key/getSetCapeReqToken";
 
 interface ProductData{
     ativado_produto: boolean,
@@ -232,6 +233,7 @@ export default function EditProduct(){
             setAlertType("sucesso")
             setAlertMessage("Imagem excluída com sucesso!")
             limpaAlert();
+            getData();
         }else{
             setAlertType("erro")
             setAlertMessage("Não foi possível enviar a imagem!")
@@ -240,16 +242,57 @@ export default function EditProduct(){
 
     }
 
+    async function setCape(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, url: string): Promise<void> {
+        e.preventDefault();
+
+        const parts = url.split("produto")[1].split("/")[2].split("-");
+        const imageId = parts.filter((_,index) => index != 3).join("-");
+        const id = url.split("produto")[1].split("/")[1];
+        const token = await getSetCapeReqToken();
+        
+        const api = await fetch("/api/setcape",{
+            method: "POST",
+            body: JSON.stringify({id_image: imageId, id_produto: id}),
+            headers:{
+                "Content-type":"application/json",
+                "x-key": `Bearer ${token}`,
+            }
+        });
+
+        const status = api.status;
+        const response = await api.json();
+
+        if(status === 200){
+            setAlertType("sucesso")
+            setAlertMessage("Capa definida com sucesso!");
+            limpaAlert();
+            getData();
+        }else{
+            setAlertType("erro")
+            setAlertMessage("Algo deu errado!")
+            limpaAlert();
+        }
+
+       
+
+    }
+
     const DotsImage:FunctionComponent<urlImage> = ({url})=>{
+
+
         return(
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger className="outline-none">
                     <div className="cursor-pointer text-slate-50">{<FontAwesomeIcon icon={faEllipsis} />}</div>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content className="outline-none bg-slate-50 p-3 px-4 rounded-lg shadown font-semibold flex flex-col gap-2">
+                    <DropdownMenu.Item asChild>
+                        <button onClick={(e)=>{setCape(e,url)}}>Definir como capa</button>
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Separator className="h-0.5 bg-slate-300 rounded-xl" />
                     <AlertDialog.Root>
-                        <AlertDialog.Trigger>
-                            deletar
+                        <AlertDialog.Trigger className="flex item-start">
+                            Deletar
                         </AlertDialog.Trigger>
                         <AlertDialog.Portal>
                             <AlertDialog.Overlay className="AlertDialogOverlay" />
@@ -272,7 +315,6 @@ export default function EditProduct(){
                         </AlertDialog.Portal>
                     </AlertDialog.Root>
 
-                    
                 </DropdownMenu.Content>
             </DropdownMenu.Root>
         )
@@ -370,7 +412,7 @@ export default function EditProduct(){
         if(files && files.length > 0){
             const imageData = new FormData();
             for (let i = 0; i < files.length; i++) {
-                imageData.append("files", files[i]); // 'files' é o nome do campo no servidor
+                imageData.append("files", files[i]); 
             }
 
             imageData.append("id_produto", DateForm.id_produto);

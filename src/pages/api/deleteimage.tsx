@@ -20,6 +20,8 @@ export default async function deleteImage(req: NextApiRequest, res: NextApiRespo
 
         if(url){
 
+            //buscar se é capa.
+
             await del(url);
 
             res.setHeader("Cache-Control", "s-maxage=10, stale-while-revalidate");

@@ -59,10 +59,12 @@ export default async function getArchived(req: NextApiRequest, res: NextApiRespo
                 const status = api.status;
                 const response = await api.json();
 
+                console.log(response);
+
                 if(status === 200){
                 if(response && response.blobs.length > 0){
                     const preUrls: string[] = [];
-                    for(const preUrl of response.blobs.slice(1)){
+                    for(const preUrl of response.blobs){
                     preUrls.push(preUrl.url);
                     }
 
@@ -72,6 +74,7 @@ export default async function getArchived(req: NextApiRequest, res: NextApiRespo
 
             }));
 
+
             if(urls.length > 0){
                 for(let x = 0; x < query.length; x++){
                 if(urls[query[x].id_produto]){
@@ -80,6 +83,7 @@ export default async function getArchived(req: NextApiRequest, res: NextApiRespo
                 }
 
             }
+
         
             res.setHeader("Cache-Control","s-maxage=10, stale-while-revalidate");
             return res.status(200).json(query);
