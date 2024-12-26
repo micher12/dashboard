@@ -262,7 +262,7 @@ export default function EditProduct(){
         const status = api.status;
         const response = await api.json();
 
-        if(status === 200){
+        if(status === 200 && response.sucesso === "ok"){
             setAlertType("sucesso")
             setAlertMessage("Capa definida com sucesso!");
             limpaAlert();
