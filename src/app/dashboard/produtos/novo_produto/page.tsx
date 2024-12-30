@@ -2,7 +2,7 @@ import AsideBar from "@/app/components/AsideBar";
 import MainContent from "@/app/components/MainContent";
 import CreateNewProduct from "@/app/components/ui/products/createnewproduct";
 
-export default function NewProduct(){
+export default function Novo_Produto(){
 
     return(
         <>

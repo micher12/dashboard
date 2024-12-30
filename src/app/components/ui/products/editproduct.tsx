@@ -475,7 +475,7 @@ export default function EditProduct(){
 
     return(
         <div className="flex flex-col productContainer">
-        <div className="mt-7 productContent p-3">
+        <div className="mt-3 productContent p-3">
         {data.id_produto == 0 ?
         <Skeleton type="edit_product" /> //criar o type correto depois
         :

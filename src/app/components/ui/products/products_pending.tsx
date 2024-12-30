@@ -61,7 +61,7 @@ export default function ProductsPending(){
     function newProduct(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
         e.preventDefault();
 
-        router.push("/dashboard/produtos/novoproduto");
+        router.push("/dashboard/produtos/novo_produto");
     }
 
 

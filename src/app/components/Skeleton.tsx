@@ -3,7 +3,7 @@
 import { FunctionComponent } from "react";
 
 interface SkeletonProps{
-    type: "image" | "header" | "products" | "edit_product",
+    type: "image" | "header" | "products" | "edit_product" | "create_new_product",
     className?: string
 }
 
@@ -101,6 +101,30 @@ const Skeleton:FunctionComponent<SkeletonProps> = ({type, className}) => {
                 <div className={classe}></div>
                 <div className={classe}></div>
                 <div className={classe}></div>
+            </div>
+            </>
+        )
+    }
+    if(type === "create_new_product"){
+        const classe = `bg-slate-300 rounded bg-skeleton h-10`;
+        const imageClass = `bg-slate-300 rounded-lg bg-skeleton w-40 h-40`;
+
+        return(
+            <>
+            
+            <div className="flex flex-col gap-12 mt-8">
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className="flex items-center gap-16 justify-start flex-wrap">
+                    <div className={imageClass}></div>
+                    <div className={imageClass}></div>
+                    <div className={imageClass}></div>
+                    <div className={imageClass}></div>
+                    <div className={imageClass}></div>
+                </div>
             </div>
             </>
         )

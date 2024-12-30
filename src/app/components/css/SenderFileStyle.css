@@ -65,10 +65,27 @@
 .custum-file-upload input {
   display: none;
 }
+.imageView{
+  max-width: 95%;
+  display: flex;
+}
+.singleFlex{
+  flex: 1 1 auto;
+}
+
 
 @media screen and (max-width: 500px){
   .custum-file-upload{
-    width: 100%;
+    width: 90%;
     height: auto;
+  }
+  .imageView{
+    width: 90%;
+  }
+  .singleFlex{
+    width: 100%;
+  }
+  .singleImage{
+    width: 100%;
   }
 }

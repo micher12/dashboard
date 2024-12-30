@@ -1,8 +1,11 @@
 "use client";
 import "@/app/components/css/SenderFileStyle.css"
-import { FunctionComponent, useEffect, useState } from "react";
+import { useState } from "react";
 import AlertUI from "./AlertUI";
 import Image from "next/image";
+import Zoom from "react-medium-image-zoom";
+import 'react-medium-image-zoom/dist/styles.css'
+import React from "react";
 
 
 
@@ -54,13 +57,17 @@ const SenderFileUI = ({changeFiles}: {changeFiles: (files: FileList | null)=> vo
 
     function RenderPreview(){
         const res = Object.entries(preview).map(([key,val])=>(
-            <Image key={key} className="rounded-lg shadow-lg" src={val} style={{objectFit: "contain"}} width={100} height={100} alt="preview" />
+            <div className="singleFlex" key={key}>
+                <Zoom>
+                    <Image key={key} className="rounded-lg shadow-lg singleImage" src={val} style={{objectFit: "contain"}} width={100} height={100} alt="preview" />
+                </Zoom>
+            </div>
         ))
 
         return(
             <>
             <h2 className="mt-5">Imagens selecionadas: </h2>
-            <div className="flex border-2 mt-2 rounded-lg p-5 gap-5 w-fit" >
+            <div className="imageView flex flex-wrap border-2 mt-2 rounded-lg p-5 gap-5 w-fit" >
                 {res}
             </div>
             </>
