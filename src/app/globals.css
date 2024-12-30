@@ -27,6 +27,9 @@ body::-webkit-scrollbar-thumb{
 .shadown{
     box-shadow: 0 0 24px rgba(36, 38, 114, 0.18);
 }
+.shadown-2{
+    box-shadow: 2px 4px 12px rgba(36, 38, 114, 0.12);
+}
 .skeleton-image{
     width: 300px;
     height: 200px;

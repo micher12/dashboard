@@ -59,8 +59,6 @@ export default async function getArchived(req: NextApiRequest, res: NextApiRespo
                 const status = api.status;
                 const response = await api.json();
 
-                console.log(response);
-
                 if(status === 200){
                 if(response && response.blobs.length > 0){
                     const preUrls: string[] = [];

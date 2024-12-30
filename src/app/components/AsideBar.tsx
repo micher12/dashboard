@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxesStacked, faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faRectangleList } from "@fortawesome/free-regular-svg-icons"
 import Link from "next/link";
 import { FunctionComponent, useEffect, useRef, useState } from "react";
 
@@ -98,6 +99,7 @@ export default function AsideBar(){
             <div className="flex flex-col gap-3 mt-2">
                 <Link href={"/dashboard"} className="flex items-center gap-1 font-semibold text-lg cursor-pointer"><FontAwesomeIcon icon={faHouse} style={{width: "20px"}} /> {mobiled ? "HOME" : <></>}</Link>
                 <Link href={"/dashboard/produtos"} className="flex items-center gap-1 font-semibold text-lg cursor-pointer"><FontAwesomeIcon icon={faBoxesStacked} style={{width: "20px"}} /> {mobiled ? "PRODUTOS" : <></>}</Link>
+                <Link href={"/dashboard/categorias"} className="flex items-center gap-1 font-semibold text-lg cursor-pointer"><FontAwesomeIcon icon={faRectangleList} style={{width: "20px"}} /> {mobiled ? "CATEGORIAS" : <></>}</Link>
             </div>
         </aside>
         }
