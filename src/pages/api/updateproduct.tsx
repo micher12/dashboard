@@ -32,6 +32,7 @@ export default async function updateProduct(req:NextApiRequest, res: NextApiResp
 
             await sql('UPDATE estoque SET quantidade_estoque = $1 WHERE id_estoque = $2', [quantidade_estoque, id_estoque[0].id_estoque]);
 
+            res.setHeader("Cache-Control","s-maxage=10, stale-while-revalidate");
             return res.status(200).json({sucesso: "ok"})
 
         }
