@@ -7,6 +7,7 @@ import Skeleton from "../../Skeleton";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import getDeleteCategoryReqToken from "../key/getDeleteCategoryReqToken";
 import AlertUI from "../AlertUI";
+import getCadCategoriaReqToken from "../key/getCadCategoriaReqToken";
 
 interface CategoriaData{
     id_categoria: number
@@ -117,13 +118,70 @@ export default function CategoriasUI(){
         },3800);
     }
 
+    async function cadastrarCategoria(e: React.FormEvent<HTMLFormElement>){
+        e.preventDefault();
+
+        const categoria = new FormData(e.target as HTMLFormElement).get("nome_categoria");
+        const cadastrado: any = {};
+        cadastrado.current = false;
+
+        if(categoria && categoria.toString().trim() != "" && categorias){
+
+            Object.entries(categorias).map(([,val])=>{
+                if(val.nome_categoria === categoria){
+                    cadastrado.current = true;
+                    return;
+                }      
+            });
+
+            if(cadastrado.current === true){
+                setAlertType("erro");
+                setAlertMessage("Categoria já cadastrada")
+                limpaAlert();   
+                return;
+            }
+        
+
+            const token = await getCadCategoriaReqToken();
+
+            const api = await fetch("/api/cadcategoria",{
+                method: "POST",
+                body: JSON.stringify({nome_categoria: categoria}),
+                headers:{
+                    "Content-type":"application/json",
+                    "x-key": `Bearer ${token}`
+                }
+            })
+
+            const status = api.status;
+            const response = await api.json();
+
+            if(status === 200){
+                setAlertType("sucesso");
+                setAlertMessage("Categoria cadastrada com sucesso!")
+                limpaAlert();
+                getCategorias();
+            }else{
+                setAlertType("erro");
+                setAlertMessage(response.erro)
+                limpaAlert();
+            }
+
+        }else{
+            setAlertType("erro");
+            setAlertMessage("Uma nova categoria precisa de um nome!")
+            limpaAlert();
+        }
+    }
+
     return(
         <>
         <div className="flex flex-col productContainer">
         <div className="productContent p-3">
         
             {categorias ?
-            <div className="border shadown-2 w-full rounded-lg p-2 px-3 categoriasCadastradas">
+            <>
+            <div className="border shadown-2 w-full rounded-lg p-3 categoriasCadastradas">
             <form id="senderForm">
                 <h2 className="text-xl font-semibold">Categorias cadastradas: </h2>
                 <div className="flex gap-5 mt-3">
@@ -136,6 +194,18 @@ export default function CategoriasUI(){
                 </div>
             </form>
             </div>
+
+            <div className="border shadown-2 w-full rounded-lg mt-8 p-3 categoriasCadastradas">
+            <form onSubmit={cadastrarCategoria}>
+                <h2 className="text-xl font-semibold">Cadastrar nova categoria: </h2>
+                <div className="flex gap-5 mt-3 flex-col">
+                    <input name="nome_categoria" type="text" className="border rounded outline-none py-0.5 px-2 w-fit" />
+                    <input type="submit" value="Cadastrar" className="w-fit bg-blue-500 rounded text-slate-50 px-12 py-1 font-semibold text-lg cursor-pointer transition scale hover:bg-blue-600" />
+                </div>
+            </form>
+            </div>
+
+            </>
             :
             <Skeleton type="edit_product" />
             }
