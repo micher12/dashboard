@@ -38,6 +38,7 @@ export default async function deleteCategory(req: NextApiRequest, res: NextApiRe
             return res.status(500).json({erro: "Algo deu errado!"})
         }
 
+        res.setHeader("Cache-Control","s-maxage=10, stale-while-revalidate");
         return res.status(200).json({sucesso: "ok"})
     }
 
