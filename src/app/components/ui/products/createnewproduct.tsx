@@ -124,6 +124,9 @@ export default function CreateNewProduct(){
             formDate[key] = val;
         });
 
+        formDate.ativado_produto = false;
+        formDate.rascunho_produto = true;
+
         console.log(formDate);
 
     }
@@ -160,16 +163,14 @@ export default function CreateNewProduct(){
                 </div>
                 <div>
                     <h2>Produto Ativado: </h2>
-                    <select name="ativado_produto" onChange={changeSelection} value={valForm.ativado_produto || "false"}>
+                    <select name="ativado_produto" onChange={changeSelection} value={valForm.ativado_produto || "false"} disabled>
                         <option value="false">não</option>
-                        <option value="true">sim</option>
                     </select>
                 </div>
                 <div>
                     <h2>Produto em rascunho: </h2>
-                    <select name="rascunho_produto" onChange={changeSelection} value={valForm.rascunho_produto || "true"}>
+                    <select name="rascunho_produto" onChange={changeSelection} value={valForm.rascunho_produto || "true"} disabled>
                         <option value="true">sim</option>
-                        <option value="false" >não</option>
                     </select>
                 </div>
 

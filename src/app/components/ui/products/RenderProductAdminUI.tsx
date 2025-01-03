@@ -27,9 +27,10 @@ interface dataProps{
 
 interface RenderProduct{
     data: dataProps[]
+    type?: null | "all"
 }
 
-const RenderProductAdminUI:FunctionComponent<RenderProduct> = ({data})=>{
+const RenderProductAdminUI:FunctionComponent<RenderProduct> = ({data, type})=>{
 
     const RenderImage:FunctionComponent<RenderImageInterface> = ({urls})=>{
         const capaId: string[] = [];
@@ -84,10 +85,56 @@ const RenderProductAdminUI:FunctionComponent<RenderProduct> = ({data})=>{
                     {val.nome_produto}
                 </div>
                 <div className="">
-                    {val.descricao_produto}
+                    {val.descricao_produto.slice(0,20)}
                 </div>
                 <div className="">
-                    {val.preco_produto/100}
+                    ${val.preco_produto/100}
+                </div>
+                <div className="">Ativo: {val.ativado_produto === true ? "true" : "false"}</div>
+                <div className="">Estoque: {val.quantidade_estoque}</div>
+                <div className="">Categoria: {val.nome_categoria}</div>
+                
+                <DropdownMenu.Root>
+                    <DropdownMenu.Trigger className="outline-none">
+                        <div className="cursor-pointer">{<FontAwesomeIcon icon={faEllipsis} />}</div>
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Content className="outline-none bg-slate-50 p-3 px-4 rounded-lg shadown font-semibold flex flex-col gap-2">
+                        <DropdownMenu.Item>
+                            <div className="cursor-pointer">Visualizar</div>
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item>
+                            <Link href={`/dashboard/produtos/editar?id=${val.id_produto}`} className="cursor-pointer">Editar</Link>
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Separator className="border border-1"></DropdownMenu.Separator>
+                        <DropdownMenu.Item >
+                            <div className="cursor-pointer">Excluir</div>
+                        </DropdownMenu.Item>
+                    </DropdownMenu.Content>
+                </DropdownMenu.Root>
+            </div>
+        ));
+
+        return(
+            res
+        )
+    }
+
+    const RenderProductsAll = ()=>{
+
+        if(!data)
+            return;
+
+        const res = Object.entries(data).map(([key, val])=>(
+            <div key={key} accessKey={val.id_produto.toString()} className="border-b py-5 flex justify-between skeletonPending w-full px-8 items-center">
+                <RenderImage urls={val.urls} />
+                <div className="">
+                    {val.nome_produto}
+                </div>
+                <div className="">
+                    Rascunho: {val.rascunho_produto ? "true" : "false"}
+                </div>
+                <div className="">
+                    ${val.preco_produto/100}
                 </div>
                 <div className="">Ativo: {val.ativado_produto === true ? "true" : "false"}</div>
                 <div className="">Estoque: {val.quantidade_estoque}</div>
@@ -120,7 +167,12 @@ const RenderProductAdminUI:FunctionComponent<RenderProduct> = ({data})=>{
 
     return(
         <>
+        {type ? 
+        <RenderProductsAll  />
+        :
         <RenderProducts  />
+        }
+        
         </>
     )
 

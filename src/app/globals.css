@@ -14,6 +14,9 @@
 .scale:hover{
     transform: translateY(-2px) scale(1.02);
 }
+body{
+    overflow-x: hidden;
+}
 body::-webkit-scrollbar{
     width: 6px;
     border-radius: 200px;

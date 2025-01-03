@@ -437,7 +437,7 @@ export default function EditProduct(){
             }
                 
         }
-        
+
         const api = await fetch("/api/updateproduct",{
             method: "POST",
             body: JSON.stringify(DateForm),
@@ -454,7 +454,9 @@ export default function EditProduct(){
             setAlertType("sucesso")
             setAlertMessage("Produto atualizado com sucesso!")
             limpaAlert();
-            getData();
+            setTimeout(()=>{
+                getData();
+            },800);
         }else{
             if(status === 500 && response.erro === "Dados inválidos!"){
                 setAlertType("erro")
@@ -475,7 +477,7 @@ export default function EditProduct(){
 
     return(
         <div className="flex flex-col productContainer">
-        <div className="mt-3 productContent p-3">
+        <div className="mt-3 productContent w-full p-3">
         {data.id_produto == 0 ?
         <Skeleton type="edit_product" /> //criar o type correto depois
         :
@@ -509,14 +511,14 @@ export default function EditProduct(){
             <div>
                 <h2>Produto Ativado: </h2>
                 <select name="ativado_produto" >
-                    <option value={`${data.ativado_produto || true} `} defaultValue={"false"}>{`${data.ativado_produto === true ? "sim" : "não"}`}</option>
+                    <option value={`${data.ativado_produto}`}>{`${data.ativado_produto === true ? "sim" : "não"}`}</option>
                     <option value={`${!data.ativado_produto}`}>{`${!data.ativado_produto === true ? "sim" : "não"}`}</option>
                 </select>
             </div>
             <div>
                 <h2>Produto em rascunho: </h2>
                 <select name="rascunho_produto" >
-                    <option value={`${data.rascunho_produto || true} `} defaultValue={"true"}> {`${data.rascunho_produto === true ? "sim" : "não"}`}</option>
+                    <option value={`${data.rascunho_produto}`}> {`${data.rascunho_produto === true ? "sim" : "não"}`}</option>
                     <option value={`${!data.rascunho_produto}`}>{`${!data.rascunho_produto === true ? "sim" : "não"}`}</option>
                 </select>
             </div>

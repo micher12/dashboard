@@ -35,22 +35,14 @@ const Skeleton:FunctionComponent<SkeletonProps> = ({type, className}) => {
         );
     }
     if(type === "products"){
-        const classe = `bg-slate-300 rounded bg-skeleton h-6 w-28 grow-1`;
-        const mainClass = `border-y py-5 flex justify-between flex-nowrap ${className}`;
+        const classe = `bg-slate-300 rounded bg-skeleton h-10 w-32 grow-1`;
+        const cape = `h-24 w-24 rounded-lg`;
+        const mainClass = `border-y py-5 flex items-center justify-around flex-nowrap ${className}`;
 
         return(
             <>
             <div className={mainClass}>
-                <div className={classe}></div>
-                <div className={classe}></div>
-                <div className={classe}></div>
-                <div className={classe}></div>
-                <div className={classe}></div>
-                <div className={classe}></div>
-                <div className={classe}></div>
-            </div>
-            <div className={mainClass} >
-            <div className={classe}></div>
+                <div className={`${classe} ${cape}`}></div>
                 <div className={classe}></div>
                 <div className={classe}></div>
                 <div className={classe}></div>
@@ -58,8 +50,8 @@ const Skeleton:FunctionComponent<SkeletonProps> = ({type, className}) => {
                 <div className={classe}></div>
                 <div className={classe}></div>
             </div>
-            <div className={mainClass} >
-            <div className={classe}></div>
+            <div className={mainClass}>
+                <div className={`${classe} ${cape}`}></div>
                 <div className={classe}></div>
                 <div className={classe}></div>
                 <div className={classe}></div>
@@ -67,8 +59,26 @@ const Skeleton:FunctionComponent<SkeletonProps> = ({type, className}) => {
                 <div className={classe}></div>
                 <div className={classe}></div>
             </div>
-            <div className={mainClass} >
+            <div className={mainClass}>
+                <div className={`${classe} ${cape}`}></div>
                 <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+            </div>
+            <div className={mainClass}>
+                <div className={`${classe} ${cape}`}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+                <div className={classe}></div>
+            </div>
+            <div className={mainClass}>
+                <div className={`${classe} ${cape}`}></div>
                 <div className={classe}></div>
                 <div className={classe}></div>
                 <div className={classe}></div>
@@ -81,11 +91,11 @@ const Skeleton:FunctionComponent<SkeletonProps> = ({type, className}) => {
     }
     if(type === "edit_product"){
         const classe = `bg-slate-300 rounded bg-skeleton h-10`;
-        const imageClass = `bg-slate-300 rounded-lg bg-skeleton w-40 h-40`;
+        const imageClass = `bg-slate-300 rounded-lg bg-skeleton w-32 h-32 flex-1`;
 
         return(
             <>
-            <div className="flex items-center gap-16 justify-start flex-wrap">
+            <div className="flex items-center gap-16 justify-start flex-wrap w-max">
                 <div className={imageClass}></div>
                 <div className={imageClass}></div>
                 <div className={imageClass}></div>

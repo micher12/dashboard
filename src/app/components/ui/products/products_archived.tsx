@@ -47,11 +47,13 @@ export default function ProdutcsArchived(){
 
     return(
         <>
-        {data ?
+        <div className="pendingProducts mt-10 flex flex-col w-full">
+            {data === null ?
+            <Skeleton type="products" className="skeletonPending" />
+            :
             <RenderProductAdminUI data={data} />
-        :
-        <Skeleton type="products" />
-        }
+            }
+        </div>
         </>
     )
 }
